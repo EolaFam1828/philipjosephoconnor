@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Philip Joseph O'Connor Memorial</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin-section { margin: 32px 0; }
+    .admin-section h2 { margin-bottom: 16px; }
+    .admin-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .admin-card p { margin: 4px 0; }
+    .admin-card .meta { color: var(--text-muted); font-size: 0.9rem; }
+    .admin-actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .admin-actions button {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.9rem;
+    }
+    .btn-approve { background: #2d6a2e; color: #fff; border-color: #2d6a2e; }
+    .btn-approve:hover { background: #245524; }
+    .btn-reject { background: #b33; color: #fff; border-color: #b33; }
+    .btn-reject:hover { background: #922; }
+    .btn-approve-all { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-approve-all:hover { background: var(--accent-dark); }
+    .btn-delete { background: #b33; color: #fff; border-color: #b33; }
+    .btn-delete:hover { background: #922; }
+    .admin-photo { max-width: 200px; border-radius: 4px; margin-top: 8px; }
+    .login-form { max-width: 400px; margin: 80px auto; }
+    .login-form input { width: 100%; padding: 12px; margin: 12px 0; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
+    .login-form button { width: 100%; }
+    .count-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin-left: 8px;
+    }
+    .empty-message { color: var(--text-muted); font-style: italic; }
+    .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--border); }
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: 'Source Serif 4', serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="site-name">Philip Joseph O'Connor</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/admin" aria-current="page">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="page-hero">
+      <h1>Admin Panel</h1>
+      <p class="subtitle">Manage Guestbook &amp; Gallery</p>
+      <hr>
+    </header>
+
+    <!-- Login -->
+    <div id="login-section" class="login-form">
+      <h2>Enter Admin Token</h2>
+      <form id="login-form">
+        <input type="password" id="admin-token" placeholder="Admin token" required>
+        <button type="submit">Sign In</button>
+      </form>
+      <div id="login-error" class="form-status" aria-live="polite"></div>
+    </div>
+
+    <!-- Admin Content (hidden until authenticated) -->
+    <div id="admin-content" style="display:none;">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="pending">Pending Messages <span id="pending-count" class="count-badge">0</span></button>
+        <button class="tab-btn" data-tab="approved">Approved Messages <span id="approved-count" class="count-badge">0</span></button>
+        <button class="tab-btn" data-tab="photos">Gallery Photos <span id="photos-count" class="count-badge">0</span></button>
+      </div>
+
+      <div id="tab-pending" class="tab-content active">
+        <div style="margin-bottom:16px;">
+          <button id="approve-all-btn" class="btn-approve-all" style="padding:10px 24px; border:none; border-radius:4px; cursor:pointer; font-family:'Source Serif 4',serif; font-size:1rem;">Approve All Pending</button>
+        </div>
+        <div id="pending-list"></div>
+      </div>
+
+      <div id="tab-approved" class="tab-content">
+        <div id="approved-list"></div>
+      </div>
+
+      <div id="tab-photos" class="tab-content">
+        <div id="photos-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p class="copyright">&copy; 2026 The Family of Philip Joseph O'Connor</p>
+  </footer>
+
+  <script>
+  (function() {
+    var token = '';
+    var API = '/api/admin';
+
+    // Login
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      token = document.getElementById('admin-token').value.trim();
+      try {
+        var res = await fetch(API + '?action=pending&token=' + encodeURIComponent(token));
+        if (!res.ok) throw new Error('Invalid token');
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('admin-content').style.display = 'block';
+        loadAll();
+      } catch (err) {
+        document.getElementById('login-error').textContent = 'Invalid token. Please try again.';
+        document.getElementById('login-error').className = 'form-status error-message';
+      }
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Approve all
+    document.getElementById('approve-all-btn').addEventListener('click', async function() {
+      if (!confirm('Approve all pending messages?')) return;
+      await adminAction({ action: 'approve_all' });
+      loadAll();
+    });
+
+    async function loadAll() {
+      await Promise.all([loadPending(), loadApproved(), loadPhotos()]);
+    }
+
+    async function loadPending() {
+      var data = await fetchAdmin('pending');
+      document.getElementById('pending-count').textContent = data.length;
+      var html = data.length === 0 ? '<p class="empty-message">No pending messages.</p>' : '';
+      data.forEach(function(entry) {
+        html += entryCard(entry, [
+          '<button class="btn-approve" onclick="approveEntry(\'' + entry.id + '\')">Approve</button>',
+          '<button class="btn-reject" onclick="rejectEntry(\'' + entry.id + '\')">Reject</button>'
+        ]);
+      });
+      document.getElementById('pending-list').innerHTML = html;
+    }
+
+    async function loadApproved() {
+      var data = await fetchAdmin('approved');
+      document.getElementById('approved-count').textContent = data.length;
+      var html = data.length === 0 ? '<p class="empty-message">No approved messages yet.</p>' : '';
+      data.forEach(function(entry) {
+        html += entryCard(entry, [
+          '<button class="btn-delete" onclick="deleteEntry(\'' + entry.id + '\')">Remove</button>'
+        ]);
+      });
+      document.getElementById('approved-list').innerHTML = html;
+    }
+
+    async function loadPhotos() {
+      var data = await fetchAdmin('photos');
+      document.getElementById('photos-count').textContent = data.length;
+      var html = data.length === 0 ? '<p class="empty-message">No photos yet.</p>' : '';
+      data.forEach(function(photo) {
+        var date = new Date(photo.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        html += '<div class="admin-card">' +
+          '<img src="' + esc(photo.url) + '" alt="' + esc(photo.caption) + '" class="admin-photo">' +
+          '<p><strong>' + esc(photo.caption || '(no caption)') + '</strong></p>' +
+          '<p class="meta">By ' + esc(photo.name) + ' &middot; ' + date + '</p>' +
+          '<div class="admin-actions">' +
+            '<button class="btn-delete" onclick="deletePhoto(\'' + photo.id + '\')">Delete Photo</button>' +
+          '</div></div>';
+      });
+      document.getElementById('photos-list').innerHTML = html;
+    }
+
+    function entryCard(entry, buttons) {
+      var date = new Date(entry.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      var rel = entry.relationship ? ' (' + esc(entry.relationship) + ')' : '';
+      return '<div class="admin-card">' +
+        '<p><strong>' + esc(entry.name) + '</strong>' + rel + '</p>' +
+        '<p>' + esc(entry.message) + '</p>' +
+        '<p class="meta">' + date + '</p>' +
+        '<div class="admin-actions">' + buttons.join('') + '</div>' +
+        '</div>';
+    }
+
+    async function fetchAdmin(action) {
+      var res = await fetch(API + '?action=' + action + '&token=' + encodeURIComponent(token));
+      if (!res.ok) return [];
+      return await res.json();
+    }
+
+    async function adminAction(body) {
+      body.token = token;
+      await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+    }
+
+    function esc(str) {
+      var d = document.createElement('div');
+      d.textContent = str || '';
+      return d.innerHTML;
+    }
+
+    // Global functions for onclick handlers
+    window.approveEntry = async function(id) {
+      await adminAction({ action: 'approve', id: id });
+      loadAll();
+    };
+    window.rejectEntry = async function(id) {
+      if (!confirm('Reject this message? This cannot be undone.')) return;
+      await adminAction({ action: 'reject', id: id });
+      loadAll();
+    };
+    window.deleteEntry = async function(id) {
+      if (!confirm('Remove this approved message?')) return;
+      await adminAction({ action: 'delete_entry', id: id });
+      loadAll();
+    };
+    window.deletePhoto = async function(id) {
+      if (!confirm('Delete this photo? This cannot be undone.')) return;
+      await adminAction({ action: 'delete_photo', id: id });
+      loadAll();
+    };
+  })();
+  </script>
+</body>
+</html>
