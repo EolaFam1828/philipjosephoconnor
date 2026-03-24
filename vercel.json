@@ -4,6 +4,7 @@
     { "source": "/life", "destination": "/life.html" },
     { "source": "/service", "destination": "/service.html" },
     { "source": "/gallery", "destination": "/gallery.html" },
-    { "source": "/guestbook", "destination": "/guestbook.html" }
+    { "source": "/guestbook", "destination": "/guestbook.html" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }

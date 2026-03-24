@@ -1,6 +1,7 @@
+import { kv } from '@vercel/kv';
+
 export default async function handler(req, res) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', 'https://philipjosephoconnor.com');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -8,36 +9,18 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  var SUPABASE_URL = process.env.SUPABASE_URL;
-  var SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    return res.status(500).json({ error: 'Server configuration error' });
-  }
-
-  var supabaseHeaders = {
-    'apikey': SUPABASE_ANON_KEY,
-    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-    'Content-Type': 'application/json',
-    'Prefer': 'return=minimal'
-  };
-
   // GET — return approved entries
   if (req.method === 'GET') {
     try {
-      var response = await fetch(
-        SUPABASE_URL + '/rest/v1/guestbook?approved=eq.true&order=created_at.desc',
-        { headers: supabaseHeaders }
-      );
-      if (!response.ok) throw new Error('Database query failed');
-      var data = await response.json();
-      return res.status(200).json(data);
+      var approved = await kv.get('guestbook_approved');
+      return res.status(200).json(approved || []);
     } catch (error) {
+      console.error('Guestbook GET error:', error);
       return res.status(500).json({ error: 'Failed to load messages' });
     }
   }
 
-  // POST — submit new entry
+  // POST — submit new entry (goes to pending)
   if (req.method === 'POST') {
     try {
       var body = req.body;
@@ -45,43 +28,35 @@ export default async function handler(req, res) {
       var relationship = body.relationship;
       var message = body.message;
 
-      // Validate
       if (!name || !message) {
         return res.status(400).json({ error: 'Name and message are required' });
       }
       if (name.length > 200 || message.length > 5000) {
         return res.status(400).json({ error: 'Input too long' });
       }
-      if (relationship && relationship.length > 100) {
-        return res.status(400).json({ error: 'Relationship too long' });
-      }
 
-      // Sanitize — strip HTML tags
       var sanitize = function(str) {
         return str.replace(/<[^>]*>/g, '').trim();
       };
 
       var entry = {
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         name: sanitize(name),
-        relationship: relationship ? sanitize(relationship) : null,
+        relationship: relationship ? sanitize(relationship).slice(0, 100) : null,
         message: sanitize(message),
-        approved: false,
         created_at: new Date().toISOString()
       };
 
-      var postResponse = await fetch(
-        SUPABASE_URL + '/rest/v1/guestbook',
-        {
-          method: 'POST',
-          headers: supabaseHeaders,
-          body: JSON.stringify(entry)
-        }
-      );
+      var pending = await kv.get('guestbook_pending') || [];
+      pending.unshift(entry);
+      await kv.set('guestbook_pending', pending);
 
-      if (!postResponse.ok) throw new Error('Database insert failed');
-
-      return res.status(201).json({ success: true, message: 'Your message has been received and will appear after review.' });
+      return res.status(201).json({
+        success: true,
+        message: 'Your message has been received and will appear after review.'
+      });
     } catch (error) {
+      console.error('Guestbook POST error:', error);
       return res.status(500).json({ error: 'Failed to save message' });
     }
   }
