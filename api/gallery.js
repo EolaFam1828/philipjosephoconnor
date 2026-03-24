@@ -1,5 +1,11 @@
+import { createClient } from 'redis';
 import { put } from '@vercel/blob';
-import { kv } from '@vercel/kv';
+
+async function getRedis() {
+  var client = createClient({ url: process.env.KV_URL });
+  await client.connect();
+  return client;
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -10,20 +16,18 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // GET — return all photos
-  if (req.method === 'GET') {
-    try {
-      var photos = await kv.get('gallery_photos');
-      return res.status(200).json(photos || []);
-    } catch (error) {
-      console.error('Gallery GET error:', error);
-      return res.status(500).json({ error: 'Failed to load photos' });
-    }
-  }
+  var redis;
+  try {
+    redis = await getRedis();
 
-  // POST — upload a photo
-  if (req.method === 'POST') {
-    try {
+    // GET — return all photos
+    if (req.method === 'GET') {
+      var data = await redis.get('gallery_photos');
+      return res.status(200).json(data ? JSON.parse(data) : []);
+    }
+
+    // POST — upload a photo
+    if (req.method === 'POST') {
       var body = req.body;
       var image = body.image;
       var caption = body.caption;
@@ -33,7 +37,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Image is required' });
       }
 
-      // Validate base64 data URL
       var match = image.match(/^data:image\/(jpeg|png|gif|webp);base64,(.+)$/);
       if (!match) {
         return res.status(400).json({ error: 'Invalid image format. Please use JPEG, PNG, GIF, or WebP.' });
@@ -42,7 +45,6 @@ export default async function handler(req, res) {
       var ext = match[1];
       var buffer = Buffer.from(match[2], 'base64');
 
-      // 4MB limit (leaves room for JSON overhead within Vercel's 4.5MB body limit)
       if (buffer.length > 4 * 1024 * 1024) {
         return res.status(400).json({ error: 'Image too large. Please use a smaller photo (max 4MB).' });
       }
@@ -65,16 +67,19 @@ export default async function handler(req, res) {
         created_at: new Date().toISOString()
       };
 
-      var photos = await kv.get('gallery_photos') || [];
+      var raw = await redis.get('gallery_photos');
+      var photos = raw ? JSON.parse(raw) : [];
       photos.unshift(photo);
-      await kv.set('gallery_photos', photos);
+      await redis.set('gallery_photos', JSON.stringify(photos));
 
       return res.status(201).json({ success: true, photo: photo });
-    } catch (error) {
-      console.error('Gallery POST error:', error);
-      return res.status(500).json({ error: 'Failed to upload photo' });
     }
-  }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (error) {
+    console.error('Gallery error:', error);
+    return res.status(500).json({ error: 'Server error' });
+  } finally {
+    if (redis) await redis.disconnect().catch(function() {});
+  }
 }

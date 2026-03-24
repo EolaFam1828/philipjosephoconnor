@@ -1,4 +1,10 @@
-import { kv } from '@vercel/kv';
+import { createClient } from 'redis';
+
+async function getRedis() {
+  var client = createClient({ url: process.env.KV_URL });
+  await client.connect();
+  return client;
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,20 +15,18 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // GET — return approved entries
-  if (req.method === 'GET') {
-    try {
-      var approved = await kv.get('guestbook_approved');
-      return res.status(200).json(approved || []);
-    } catch (error) {
-      console.error('Guestbook GET error:', error);
-      return res.status(500).json({ error: 'Failed to load messages' });
-    }
-  }
+  var redis;
+  try {
+    redis = await getRedis();
 
-  // POST — submit new entry (goes to pending)
-  if (req.method === 'POST') {
-    try {
+    // GET — return approved entries
+    if (req.method === 'GET') {
+      var data = await redis.get('guestbook_approved');
+      return res.status(200).json(data ? JSON.parse(data) : []);
+    }
+
+    // POST — submit new entry (goes to pending)
+    if (req.method === 'POST') {
       var body = req.body;
       var name = body.name;
       var relationship = body.relationship;
@@ -47,19 +51,22 @@ export default async function handler(req, res) {
         created_at: new Date().toISOString()
       };
 
-      var pending = await kv.get('guestbook_pending') || [];
+      var raw = await redis.get('guestbook_pending');
+      var pending = raw ? JSON.parse(raw) : [];
       pending.unshift(entry);
-      await kv.set('guestbook_pending', pending);
+      await redis.set('guestbook_pending', JSON.stringify(pending));
 
       return res.status(201).json({
         success: true,
         message: 'Your message has been received and will appear after review.'
       });
-    } catch (error) {
-      console.error('Guestbook POST error:', error);
-      return res.status(500).json({ error: 'Failed to save message' });
     }
-  }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (error) {
+    console.error('Guestbook error:', error);
+    return res.status(500).json({ error: 'Server error' });
+  } finally {
+    if (redis) await redis.disconnect().catch(function() {});
+  }
 }
