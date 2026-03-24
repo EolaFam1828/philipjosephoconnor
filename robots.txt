@@ -1,4 +1,10 @@
+# Full public crawl access for search engines
 User-agent: *
 Allow: /
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /og-img1.jpeg
 
+# Primary sitemap
 Sitemap: https://philipjosephoconnor.com/sitemap.xml

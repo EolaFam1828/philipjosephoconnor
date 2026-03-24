@@ -48,32 +48,32 @@
     guideLinks: [
       {
         href: '/memorial',
-        title: 'Memorial Hub',
-        description: 'A focused overview page connecting the obituary, biography, timeline, service details, gallery, and guestbook.'
+        title: 'Philip Joseph O\'Connor Memorial Hub',
+        description: 'A focused overview page connecting the obituary, biography, timeline, service details, gallery, and guestbook for Philip Joseph O\'Connor.'
       },
       {
         href: '/about',
-        title: 'About Philip',
+        title: 'Philip Joseph O\'Connor Biography',
         description: 'A biographical page built around Philip Joseph O\'Connor\'s identity, family, education, and career.'
       },
       {
         href: '/timeline',
-        title: 'Life Timeline',
-        description: 'A chronological view of the milestones, moves, work, family life, and remembrance events that shaped his story.'
+        title: 'Philip Joseph O\'Connor Timeline',
+        description: 'A chronological view of the milestones, moves, work, family life, and remembrance events that shaped Philip Joseph O\'Connor\'s story.'
       },
       {
         href: '/obituary',
-        title: 'Full Obituary',
+        title: 'Philip Joseph O\'Connor Obituary',
         description: 'The complete obituary text, family details, memorial service information, and tribute language in one place.'
       },
       {
         href: '/gallery',
-        title: 'Photos & Memories',
-        description: 'Family photographs, shared moments, and visual memories that deepen the memorial record.'
+        title: 'Philip Joseph O\'Connor Photos',
+        description: 'Family photographs, shared moments, and visual memories that deepen the memorial record for Philip Joseph O\'Connor.'
       },
       {
         href: '/guestbook',
-        title: 'Messages & Tributes',
+        title: 'Philip Joseph O\'Connor Guestbook',
         description: 'A place for condolences, stories, and written memories from family, friends, colleagues, and neighbors.'
       }
     ],
