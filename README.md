@@ -58,3 +58,8 @@ vercel env pull .env.local
 - Route rewrites are configured in `vercel.json`
 - The admin page is intended for private use only and relies on `ADMIN_TOKEN`
 - Blob objects are public because gallery photos need to render on the site
+
+## Post-deploy verification
+
+- Visit `/api/health` after deploy to verify Redis, Blob, and `ADMIN_TOKEN` are all configured and responding.
+- Open `/admin` to see the same storage checks rendered in the admin UI before signing in.

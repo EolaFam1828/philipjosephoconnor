@@ -67,6 +67,44 @@
     .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
+    .health-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .health-panel h2 { margin-bottom: 8px; }
+    .health-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .health-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--bg-alt);
+    }
+    .health-card strong { display: block; margin-bottom: 6px; }
+    .health-card p { margin: 0; line-height: 1.5; }
+    .health-ok { border-color: #7ea56a; }
+    .health-error { border-color: #b33; }
+    .status-pill {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .status-pill.ok { background: #e4f1de; color: #2d6a2e; }
+    .status-pill.error { background: #f9e0e0; color: #922; }
+    .admin-feedback { margin: 0 0 20px; }
+    .admin-link-note { margin-top: 12px; font-size: 0.95rem; color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -87,6 +125,13 @@
       <hr>
     </header>
 
+    <section class="health-panel" aria-live="polite">
+      <h2>Storage Status</h2>
+      <p id="health-summary">Checking Redis, Blob, and admin configuration...</p>
+      <div id="health-grid" class="health-grid"></div>
+      <p class="admin-link-note">JSON health check: <a href="/api/health" target="_blank" rel="noopener noreferrer">/api/health</a></p>
+    </section>
+
     <!-- Login -->
     <div id="login-section" class="login-form">
       <h2>Enter Admin Token</h2>
@@ -99,6 +144,7 @@
 
     <!-- Admin Content (hidden until authenticated) -->
     <div id="admin-content" style="display:none;">
+      <div id="admin-feedback" class="form-status admin-feedback" aria-live="polite"></div>
       <div class="tab-bar">
         <button class="tab-btn active" data-tab="pending">Pending Messages <span id="pending-count" class="count-badge">0</span></button>
         <button class="tab-btn" data-tab="approved">Approved Messages <span id="approved-count" class="count-badge">0</span></button>
@@ -130,24 +176,27 @@
   (function() {
     var token = '';
     var API = '/api/admin';
+    var HEALTH_API = '/api/health';
+    var loginError = document.getElementById('login-error');
+    var adminFeedback = document.getElementById('admin-feedback');
+    var healthSummary = document.getElementById('health-summary');
+    var healthGrid = document.getElementById('health-grid');
 
-    // Login
     document.getElementById('login-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       token = document.getElementById('admin-token').value.trim();
+
       try {
-        var res = await fetch(API + '?action=pending&token=' + encodeURIComponent(token));
-        if (!res.ok) throw new Error('Invalid token');
+        clearMessage(loginError);
+        await fetchAdmin('pending');
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('admin-content').style.display = 'block';
-        loadAll();
+        await loadAll();
       } catch (err) {
-        document.getElementById('login-error').textContent = 'Invalid token. Please try again.';
-        document.getElementById('login-error').className = 'form-status error-message';
+        showMessage(loginError, err.message || 'Unable to sign in.', 'error');
       }
     });
 
-    // Tabs
     document.querySelectorAll('.tab-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -157,19 +206,40 @@
       });
     });
 
-    // Approve all
     document.getElementById('approve-all-btn').addEventListener('click', async function() {
       if (!confirm('Approve all pending messages?')) return;
-      await adminAction({ action: 'approve_all' });
-      loadAll();
+      try {
+        var result = await adminAction({ action: 'approve_all' });
+        showMessage(adminFeedback, result.message || 'All pending messages approved.', 'success');
+        await loadAll();
+      } catch (err) {
+        showMessage(adminFeedback, err.message, 'error');
+      }
     });
 
     async function loadAll() {
-      await Promise.all([loadPending(), loadApproved(), loadPhotos()]);
+      clearMessage(adminFeedback);
+
+      var results = await Promise.allSettled([loadHealth(), loadPending(), loadApproved(), loadPhotos()]);
+      var failed = results.filter(function(result) {
+        return result.status === 'rejected';
+      });
+
+      if (failed.length > 0) {
+        showMessage(adminFeedback, failed[0].reason && failed[0].reason.message ? failed[0].reason.message : 'Some admin data could not be loaded.', 'error');
+      }
     }
 
     async function loadPending() {
-      var data = await fetchAdmin('pending');
+      var data;
+      try {
+        data = await fetchAdmin('pending');
+      } catch (err) {
+        document.getElementById('pending-count').textContent = '0';
+        document.getElementById('pending-list').innerHTML = '<p class="empty-message">' + esc(err.message) + '</p>';
+        throw err;
+      }
+
       document.getElementById('pending-count').textContent = data.length;
       var html = data.length === 0 ? '<p class="empty-message">No pending messages.</p>' : '';
       data.forEach(function(entry) {
@@ -182,7 +252,15 @@
     }
 
     async function loadApproved() {
-      var data = await fetchAdmin('approved');
+      var data;
+      try {
+        data = await fetchAdmin('approved');
+      } catch (err) {
+        document.getElementById('approved-count').textContent = '0';
+        document.getElementById('approved-list').innerHTML = '<p class="empty-message">' + esc(err.message) + '</p>';
+        throw err;
+      }
+
       document.getElementById('approved-count').textContent = data.length;
       var html = data.length === 0 ? '<p class="empty-message">No approved messages yet.</p>' : '';
       data.forEach(function(entry) {
@@ -194,7 +272,15 @@
     }
 
     async function loadPhotos() {
-      var data = await fetchAdmin('photos');
+      var data;
+      try {
+        data = await fetchAdmin('photos');
+      } catch (err) {
+        document.getElementById('photos-count').textContent = '0';
+        document.getElementById('photos-list').innerHTML = '<p class="empty-message">' + esc(err.message) + '</p>';
+        throw err;
+      }
+
       document.getElementById('photos-count').textContent = data.length;
       var html = data.length === 0 ? '<p class="empty-message">No photos yet.</p>' : '';
       data.forEach(function(photo) {
@@ -222,18 +308,112 @@
     }
 
     async function fetchAdmin(action) {
-      var res = await fetch(API + '?action=' + action + '&token=' + encodeURIComponent(token));
-      if (!res.ok) return [];
-      return await res.json();
+      return fetchJson(API + '?action=' + action + '&token=' + encodeURIComponent(token));
     }
 
     async function adminAction(body) {
       body.token = token;
-      await fetch(API, {
+      return fetchJson(API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
+    }
+
+    async function loadHealth() {
+      var data;
+
+      try {
+        data = await fetchJson(HEALTH_API, { cache: 'no-store' }, true);
+      } catch (err) {
+        data = err.data || {
+          ok: false,
+          adminTokenConfigured: false,
+          storage: {
+            redis: { ok: false, configured: false, message: 'Unable to reach the health endpoint.' },
+            blob: { ok: false, configured: false, message: 'Unable to reach the health endpoint.' }
+          }
+        };
+      }
+
+      renderHealth(data);
+
+      if (!data.ok) {
+        throw new Error(primaryHealthMessage(data));
+      }
+
+      return data;
+    }
+
+    function renderHealth(data) {
+      var cards = [];
+
+      cards.push(statusCard('Redis', data.storage && data.storage.redis));
+      cards.push(statusCard('Blob', data.storage && data.storage.blob));
+      cards.push(statusCard('Admin token', {
+        ok: !!data.adminTokenConfigured,
+        configured: !!data.adminTokenConfigured,
+        message: data.adminTokenConfigured ? 'Admin token configured.' : 'ADMIN_TOKEN is missing from the Vercel project.'
+      }));
+
+      healthGrid.innerHTML = cards.join('');
+      healthSummary.textContent = data.ok
+        ? 'All required storage services are configured and responding.'
+        : primaryHealthMessage(data);
+    }
+
+    function primaryHealthMessage(data) {
+      if (!data.storage || !data.storage.redis || !data.storage.redis.ok) {
+        return data.storage && data.storage.redis ? data.storage.redis.message : 'Redis health could not be determined.';
+      }
+
+      if (!data.storage.blob || !data.storage.blob.ok) {
+        return data.storage && data.storage.blob ? data.storage.blob.message : 'Blob health could not be determined.';
+      }
+
+      if (!data.adminTokenConfigured) {
+        return 'ADMIN_TOKEN is missing from the Vercel project.';
+      }
+
+      return 'Storage health check failed.';
+    }
+
+    function statusCard(label, state) {
+      var isOk = !!(state && state.ok);
+      var message = state && state.message ? state.message : 'Status unavailable.';
+
+      return '<div class="health-card ' + (isOk ? 'health-ok' : 'health-error') + '">' +
+        '<strong>' + esc(label) + '</strong>' +
+        '<p>' + esc(message) + '</p>' +
+        '<span class="status-pill ' + (isOk ? 'ok' : 'error') + '">' + (isOk ? 'Ready' : 'Needs attention') + '</span>' +
+        '</div>';
+    }
+
+    async function fetchJson(url, options, allowErrorPayload) {
+      var res = await fetch(url, options);
+      var data = await res.json().catch(function() { return {}; });
+
+      if (!res.ok && !allowErrorPayload) {
+        throw new Error(data.error || 'Request failed');
+      }
+
+      if (!res.ok && allowErrorPayload) {
+        var error = new Error(data.error || 'Request failed');
+        error.data = data;
+        throw error;
+      }
+
+      return data;
+    }
+
+    function showMessage(element, message, type) {
+      element.textContent = message;
+      element.className = 'form-status ' + type + '-message' + (element === adminFeedback ? ' admin-feedback' : '');
+    }
+
+    function clearMessage(element) {
+      element.textContent = '';
+      element.className = 'form-status' + (element === adminFeedback ? ' admin-feedback' : '');
     }
 
     function esc(str) {
@@ -242,26 +422,50 @@
       return d.innerHTML;
     }
 
-    // Global functions for onclick handlers
     window.approveEntry = async function(id) {
-      await adminAction({ action: 'approve', id: id });
-      loadAll();
+      try {
+        var result = await adminAction({ action: 'approve', id: id });
+        showMessage(adminFeedback, result.message || 'Entry approved.', 'success');
+        await loadAll();
+      } catch (err) {
+        showMessage(adminFeedback, err.message, 'error');
+      }
     };
+
     window.rejectEntry = async function(id) {
       if (!confirm('Reject this message? This cannot be undone.')) return;
-      await adminAction({ action: 'reject', id: id });
-      loadAll();
+      try {
+        var result = await adminAction({ action: 'reject', id: id });
+        showMessage(adminFeedback, result.message || 'Entry rejected.', 'success');
+        await loadAll();
+      } catch (err) {
+        showMessage(adminFeedback, err.message, 'error');
+      }
     };
+
     window.deleteEntry = async function(id) {
       if (!confirm('Remove this approved message?')) return;
-      await adminAction({ action: 'delete_entry', id: id });
-      loadAll();
+      try {
+        var result = await adminAction({ action: 'delete_entry', id: id });
+        showMessage(adminFeedback, result.message || 'Entry deleted.', 'success');
+        await loadAll();
+      } catch (err) {
+        showMessage(adminFeedback, err.message, 'error');
+      }
     };
+
     window.deletePhoto = async function(id) {
       if (!confirm('Delete this photo? This cannot be undone.')) return;
-      await adminAction({ action: 'delete_photo', id: id });
-      loadAll();
+      try {
+        var result = await adminAction({ action: 'delete_photo', id: id });
+        showMessage(adminFeedback, result.message || 'Photo deleted.', 'success');
+        await loadAll();
+      } catch (err) {
+        showMessage(adminFeedback, err.message, 'error');
+      }
     };
+
+    loadHealth().catch(function() {});
   })();
   </script>
 </body>

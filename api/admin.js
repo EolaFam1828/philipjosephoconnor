@@ -1,5 +1,6 @@
 import { del } from '@vercel/blob';
-import { STORAGE_KEYS, readList, writeList } from '../lib/storage.js';
+import { getBlobErrorMessage, isBlobConfigured } from '../lib/blob.js';
+import { STORAGE_KEYS, getRedisErrorMessage, readList, writeList } from '../lib/storage.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -87,8 +88,15 @@ export default async function handler(req, res) {
         var idx = photos.findIndex(function(p) { return p.id === body.id; });
         if (idx === -1) return res.status(404).json({ error: 'Photo not found' });
         var photo = photos.splice(idx, 1)[0];
-        try { await del(photo.url); } catch (e) { /* ok if already gone */ }
         await writeList(STORAGE_KEYS.galleryPhotos, photos);
+        if (!isBlobConfigured()) {
+          return res.status(503).json({ error: 'Blob storage is not configured. Connect Vercel Blob and redeploy.' });
+        }
+        try {
+          await del(photo.url);
+        } catch (error) {
+          return res.status(503).json({ error: getBlobErrorMessage(error) });
+        }
         return res.status(200).json({ success: true, message: 'Photo deleted' });
       }
 
@@ -98,6 +106,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
     console.error('Admin error:', error);
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(503).json({ error: getRedisErrorMessage(error) });
   }
 }

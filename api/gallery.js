@@ -1,5 +1,6 @@
-import { put } from '@vercel/blob';
-import { STORAGE_KEYS, createRecordId, readList, sanitizeText, writeList } from '../lib/storage.js';
+import { del, put } from '@vercel/blob';
+import { getBlobErrorMessage, isBlobConfigured } from '../lib/blob.js';
+import { STORAGE_KEYS, createRecordId, getRedisErrorMessage, readList, sanitizeText, writeList } from '../lib/storage.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -37,11 +38,21 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Image too large. Please use a smaller photo (max 4MB).' });
       }
 
+      if (!isBlobConfigured()) {
+        return res.status(503).json({ error: 'Blob storage is not configured. Connect Vercel Blob and redeploy.' });
+      }
+
       var filename = 'gallery/' + Date.now() + '-' + Math.random().toString(36).slice(2, 6) + '.' + ext;
-      var blob = await put(filename, buffer, {
-        access: 'public',
-        contentType: 'image/' + ext
-      });
+      var blob;
+      try {
+        blob = await put(filename, buffer, {
+          access: 'public',
+          contentType: 'image/' + ext
+        });
+      } catch (error) {
+        console.error('Blob upload error:', error);
+        return res.status(503).json({ error: getBlobErrorMessage(error) });
+      }
 
       var photo = {
         id: createRecordId(),
@@ -53,7 +64,16 @@ export default async function handler(req, res) {
 
       var photos = await readList(STORAGE_KEYS.galleryPhotos);
       photos.unshift(photo);
-      await writeList(STORAGE_KEYS.galleryPhotos, photos);
+      try {
+        await writeList(STORAGE_KEYS.galleryPhotos, photos);
+      } catch (error) {
+        try {
+          await del(blob.url);
+        } catch (cleanupError) {
+          console.error('Gallery cleanup error:', cleanupError);
+        }
+        throw error;
+      }
 
       return res.status(201).json({ success: true, photo: photo });
     }
@@ -61,6 +81,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
     console.error('Gallery error:', error);
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(503).json({ error: getRedisErrorMessage(error) });
   }
 }
