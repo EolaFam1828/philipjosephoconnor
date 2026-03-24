@@ -2,18 +2,18 @@
 
 Static memorial site for Philip Joseph "P.J." O'Connor, deployed on Vercel with:
 
-- Vercel KV for guestbook and moderation data
+- Upstash Redis for guestbook and moderation data
 - Vercel Blob for uploaded gallery photos
 - Serverless API routes under `api/`
 
 ## Storage setup on Vercel
 
-1. In the Vercel project, add a `KV` store and connect it to this project.
+1. In the Vercel Marketplace, install the `Upstash Redis` integration for this project.
 2. Add a `Blob` store and connect it to this project.
 3. Set an `ADMIN_TOKEN` environment variable for the moderation page.
 4. Redeploy.
 
-Vercel injects the KV and Blob credentials automatically for deployed environments. For local development, pull them into a local env file:
+The Upstash integration injects `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`. Vercel Blob injects `BLOB_READ_WRITE_TOKEN`. For local development, pull them into a local env file:
 
 ```bash
 vercel env pull .env.local
@@ -24,6 +24,12 @@ vercel env pull .env.local
 - `guestbook_pending`: submitted guestbook entries waiting for review
 - `guestbook_approved`: guestbook entries visible on the site
 - `gallery_photos`: uploaded photo metadata stored alongside public Blob URLs
+
+## Why this storage choice
+
+- Vercel KV has been sunset, so the site now uses Upstash Redis instead.
+- `@upstash/redis` is HTTP-based and works cleanly in Vercel serverless functions.
+- The application storage API stays the same internally, so guestbook, moderation, and gallery behavior do not need to change.
 
 ## Moderation flow
 
