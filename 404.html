@@ -15,27 +15,10 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
+<body data-page="not-found">
 
   <a href="#main" class="skip-link">Skip to main content</a>
-
-  <nav class="site-nav" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="/" class="site-name">Philip Joseph O'Connor</a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">
-      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">
-        <span class="hamburger"></span>
-      </label>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/obituary">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </div>
-  </nav>
+  <div data-site-nav></div>
 
   <main id="main">
 
@@ -44,7 +27,10 @@
       <p>But Philip's memory lives on.</p>
       <ul>
         <li><a href="/">Home</a></li>
+        <li><a href="/memorial">Memorial</a></li>
         <li><a href="/obituary">Obituary</a></li>
+        <li><a href="/about">About Philip</a></li>
+        <li><a href="/timeline">Timeline</a></li>
         <li><a href="/life">Life &amp; Legacy</a></li>
         <li><a href="/service">Service Details</a></li>
         <li><a href="/gallery">Photo Gallery</a></li>
@@ -54,20 +40,10 @@
 
   </main>
 
-  <footer class="site-footer">
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/obituary">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </nav>
-    <p class="memorial-note">In lieu of flowers, consider a gift to the <a href="https://afsp.org" target="_blank" rel="noopener noreferrer">American Foundation for Suicide Prevention</a>.</p>
-    <p class="copyright">&copy; 2026 The Family of Philip Joseph O'Connor</p>
-  </footer>
+  <div data-site-footer></div>
+
+  <script src="/js/site-data.js"></script>
+  <script src="/js/site-shell.js"></script>
 
 </body>
 </html>

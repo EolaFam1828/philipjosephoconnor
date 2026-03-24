@@ -160,27 +160,10 @@
   }
   </script>
 </head>
-<body>
+<body data-page="obituary">
 
   <a href="#main" class="skip-link">Skip to main content</a>
-
-  <nav class="site-nav" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="/" class="site-name">Philip Joseph O'Connor</a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">
-      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">
-        <span class="hamburger"></span>
-      </label>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/obituary" aria-current="page">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </div>
-  </nav>
+  <div data-site-nav></div>
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <ol>
@@ -196,7 +179,7 @@
       <header class="page-hero">
         <h1>Philip Joseph <span class="nickname">"P.J."</span> O'Connor</h1>
         <p class="dates">
-          <time datetime="1943-09-16">September 16, 1943</time> — <time datetime="2026-03-13">March 13, 2026</time>
+          <time datetime="1943-09-16" data-site-bind="person.birthDate">September 16, 1943</time> — <time datetime="2026-03-13" data-site-bind="person.deathDate">March 13, 2026</time>
         </p>
         <hr>
       </header>
@@ -219,7 +202,7 @@
 
       <p>A celebration of Philip's life will be held at <time datetime="2026-04-11T13:30:00-04:00">1:30 PM on Saturday, April 11, 2026</time>, in the chapel of Church Street Funeral and Cremations, <address>125 S Church Street, Hendersonville, NC 28792</address>. The family will receive friends from <time datetime="2026-04-11T12:00:00-04:00">12:00</time> to <time datetime="2026-04-11T13:30:00-04:00">1:30 PM</time> prior to the service.</p>
 
-      <p>In lieu of flowers, consider a gift to the <a href="https://afsp.org" target="_blank" rel="noopener noreferrer">American Foundation for Suicide Prevention</a>, in recognition of the ways we can support one another through life's deepest struggles.</p>
+      <p>In lieu of flowers, consider a gift to the <a data-site-link="donation.url" href="https://afsp.org" target="_blank" rel="noopener noreferrer"><span data-site-bind="donation.name">American Foundation for Suicide Prevention</span></a>, in recognition of the ways we can support one another through life's deepest struggles.</p>
 
       <p>With gratitude for the life lived, and peace for the journey completed.</p>
 
@@ -256,14 +239,14 @@
     <section class="cta-links">
       <div class="cta-grid">
 
-        <a href="/life" class="cta-card">
-          <h3>Learn more about his life &rarr;</h3>
-          <p>Explore the broader story of his upbringing, career, family, and legacy.</p>
+        <a href="/about" class="cta-card">
+          <h3>About Philip &rarr;</h3>
+          <p>See the exact-match biographical page built around his identity, family, and career.</p>
         </a>
 
-        <a href="/service" class="cta-card">
-          <h3>Service Details &rarr;</h3>
-          <p>Find the time, location, and memorial contribution details.</p>
+        <a href="/timeline" class="cta-card">
+          <h3>Life Timeline &rarr;</h3>
+          <p>Follow the milestones of his life in chronological order.</p>
         </a>
 
         <a href="/guestbook" class="cta-card">
@@ -274,23 +257,14 @@
       </div>
     </section>
 
+    <section data-memorial-guide data-guide-title="Continue Through the Memorial"></section>
+
   </main>
 
-  <footer class="site-footer">
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/obituary">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </nav>
-    <p class="memorial-note">In lieu of flowers, consider a gift to the <a href="https://afsp.org" target="_blank" rel="noopener noreferrer">American Foundation for Suicide Prevention</a>.</p>
-    <p class="copyright">&copy; 2026 The Family of Philip Joseph O'Connor</p>
-  </footer>
+  <div data-site-footer></div>
 
+  <script src="/js/site-data.js"></script>
+  <script src="/js/site-shell.js"></script>
   <script>
   (function() {
     var title = 'In loving memory of Philip Joseph "P.J." O\'Connor (1943\u20132026)';

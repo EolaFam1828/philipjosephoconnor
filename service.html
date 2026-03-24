@@ -87,27 +87,10 @@
   }
   </script>
 </head>
-<body>
+<body data-page="service">
 
   <a href="#main" class="skip-link">Skip to main content</a>
-
-  <nav class="site-nav" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="/" class="site-name">Philip Joseph O'Connor</a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">
-      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">
-        <span class="hamburger"></span>
-      </label>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/obituary">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service" aria-current="page">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </div>
-  </nav>
+  <div data-site-nav></div>
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <ol>
@@ -128,59 +111,55 @@
       <h2>Celebration of Life</h2>
       <dl class="service-details">
         <dt>Date &amp; Time</dt>
-        <dd><time datetime="2026-04-11T13:30:00-04:00">Saturday, April 11, 2026 at 1:30 PM</time></dd>
+        <dd><time datetime="2026-04-11T13:30:00-04:00" data-site-bind="service.dateTime">Saturday, April 11, 2026 at 1:30 PM</time></dd>
 
         <dt>Visitation</dt>
-        <dd><time datetime="2026-04-11T12:00:00-04:00">12:00 PM</time> to <time datetime="2026-04-11T13:30:00-04:00">1:30 PM</time></dd>
+        <dd data-site-bind="service.visitation">12:00 PM to 1:30 PM</dd>
 
         <dt>Location</dt>
-        <dd>Church Street Funeral and Cremations</dd>
+        <dd data-site-bind="service.location">Church Street Funeral and Cremations</dd>
 
         <dt>Address</dt>
         <dd>
-          <address>125 S Church Street, Hendersonville, NC 28792</address>
+          <address data-site-bind="service.address">125 S Church Street, Hendersonville, NC 28792</address>
         </dd>
 
         <dt>Directions</dt>
-        <dd><a href="https://maps.google.com/?q=125+S+Church+Street+Hendersonville+NC+28792" target="_blank" rel="noopener noreferrer">View on Google Maps</a></dd>
+        <dd><a data-site-link="service.mapsUrl" href="https://maps.google.com/?q=125+S+Church+Street+Hendersonville+NC+28792" target="_blank" rel="noopener noreferrer">View on Google Maps</a></dd>
       </dl>
     </section>
 
     <section class="memorial-info">
       <h2>Memorial Contributions</h2>
       <p>Memorial trees or flowers may be ordered through the funeral home.</p>
-      <p>In lieu of flowers, consider a gift to the <a href="https://afsp.org" target="_blank" rel="noopener noreferrer">American Foundation for Suicide Prevention</a>, in recognition of the ways we can support one another through life's deepest struggles.</p>
+      <p>In lieu of flowers, consider a gift to the <a data-site-link="donation.url" href="https://afsp.org" target="_blank" rel="noopener noreferrer"><span data-site-bind="donation.name">American Foundation for Suicide Prevention</span></a>, in recognition of the ways we can support one another through life's deepest struggles.</p>
     </section>
 
     <section class="cta-links">
       <div class="cta-grid">
-        <a href="/obituary" class="cta-card">
-          <h3>Read the Obituary</h3>
-          <p>The complete obituary of Philip Joseph O'Connor, honoring a life fully lived.</p>
+        <a href="/memorial" class="cta-card">
+          <h3>Memorial Hub</h3>
+          <p>A central route into the obituary, biography, timeline, gallery, and guestbook.</p>
         </a>
         <a href="/guestbook" class="cta-card">
           <h3>Share a Memory</h3>
           <p>Leave a message for the family or share a favorite memory of Philip.</p>
         </a>
+        <a href="/timeline" class="cta-card">
+          <h3>Life Timeline</h3>
+          <p>See the milestones that led to the service, remembrance, and legacy pages.</p>
+        </a>
       </div>
     </section>
 
+    <section data-memorial-guide data-guide-title="More Ways to Remember Philip"></section>
+
   </main>
 
-  <footer class="site-footer">
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/obituary">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </nav>
-    <p class="memorial-note">In lieu of flowers, consider a gift to the <a href="https://afsp.org" target="_blank" rel="noopener noreferrer">American Foundation for Suicide Prevention</a>.</p>
-    <p class="copyright">&copy; 2026 The Family of Philip Joseph O'Connor</p>
-  </footer>
+  <div data-site-footer></div>
+
+  <script src="/js/site-data.js"></script>
+  <script src="/js/site-shell.js"></script>
 
 </body>
 </html>

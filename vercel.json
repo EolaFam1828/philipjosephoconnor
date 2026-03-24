@@ -1,6 +1,9 @@
 {
   "rewrites": [
+    { "source": "/memorial", "destination": "/memorial.html" },
     { "source": "/obituary", "destination": "/obituary.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/timeline", "destination": "/timeline.html" },
     { "source": "/life", "destination": "/life.html" },
     { "source": "/service", "destination": "/service.html" },
     { "source": "/gallery", "destination": "/gallery.html" },

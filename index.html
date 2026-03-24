@@ -139,27 +139,10 @@
   }
   </script>
 </head>
-<body>
+<body data-page="home">
 
   <a href="#main" class="skip-link">Skip to main content</a>
-
-  <nav class="site-nav" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="/" class="site-name">Philip Joseph O'Connor</a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">
-      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">
-        <span class="hamburger"></span>
-      </label>
-      <ul class="nav-links">
-        <li><a href="/" aria-current="page">Home</a></li>
-        <li><a href="/obituary">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </div>
-  </nav>
+  <div data-site-nav></div>
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <ol>
@@ -172,7 +155,7 @@
     <header class="page-hero">
       <h1>Philip Joseph <span class="nickname">"P.J."</span> O'Connor</h1>
       <p class="dates">
-        <time datetime="1943-09-16">September 16, 1943</time> — <time datetime="2026-03-13">March 13, 2026</time>
+        <time datetime="1943-09-16" data-site-bind="person.birthDate">September 16, 1943</time> — <time datetime="2026-03-13" data-site-bind="person.deathDate">March 13, 2026</time>
       </p>
       <p class="places">Salem, Massachusetts — Hendersonville, North Carolina</p>
       <p class="subtitle">A memorial home for his story, service details, photographs, and messages from the people who knew him.</p>
@@ -203,7 +186,7 @@
 
         <a href="/service" class="cta-card">
           <h3>Service Details &rarr;</h3>
-          <p><time datetime="2026-04-11">April 11, 2026</time> at 1:30 PM in Hendersonville, North Carolina.</p>
+          <p><time datetime="2026-04-11" data-site-bind="service.shortDate">April 11, 2026</time> at <span data-site-bind="service.time">1:30 PM</span> in Hendersonville, North Carolina.</p>
         </a>
       </div>
     </section>
@@ -250,36 +233,27 @@
           <p>Leave a message of condolence for the family.</p>
         </a>
 
-        <a href="/gallery" class="cta-card">
-          <h3>View the Gallery &rarr;</h3>
-          <p>Browse photographs and upload a favorite memory of Philip.</p>
+        <a href="/about" class="cta-card">
+          <h3>About Philip &rarr;</h3>
+          <p>A direct biographical overview built around his family, education, and career.</p>
         </a>
 
-        <a href="/obituary" class="cta-card">
-          <h3>Keep Reading &rarr;</h3>
-          <p>Visit the obituary page for the complete written remembrance.</p>
+        <a href="/timeline" class="cta-card">
+          <h3>Life Timeline &rarr;</h3>
+          <p>Follow the major milestones of his life in chronological order.</p>
         </a>
 
       </div>
     </section>
 
+    <section data-memorial-guide data-guide-title="Memorial Guide"></section>
+
   </main>
 
-  <footer class="site-footer">
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/obituary">Obituary</a></li>
-        <li><a href="/life">Life &amp; Legacy</a></li>
-        <li><a href="/service">Service</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-        <li><a href="/guestbook">Guestbook</a></li>
-      </ul>
-    </nav>
-    <p class="memorial-note">In lieu of flowers, consider a gift to the <a href="https://afsp.org" target="_blank" rel="noopener noreferrer">American Foundation for Suicide Prevention</a>.</p>
-    <p class="copyright">&copy; 2026 The Family of Philip Joseph O'Connor</p>
-  </footer>
+  <div data-site-footer></div>
 
+  <script src="/js/site-data.js"></script>
+  <script src="/js/site-shell.js"></script>
   <script>
   (function() {
     var title = 'In loving memory of Philip Joseph "P.J." O\'Connor (1943\u20132026)';
