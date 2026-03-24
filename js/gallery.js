@@ -12,6 +12,9 @@
 
   // Load photos
   async function loadPhotos() {
+    if (grid) {
+      grid.setAttribute('aria-busy', 'true');
+    }
     try {
       var response = await fetch(API_URL);
       if (!response.ok) throw new Error('Failed to load photos');
@@ -20,6 +23,10 @@
     } catch (error) {
       loading.textContent = 'Unable to load photos at this time. Please try again later.';
       console.error('Error loading gallery:', error);
+    } finally {
+      if (grid) {
+        grid.setAttribute('aria-busy', 'false');
+      }
     }
   }
 
@@ -27,7 +34,7 @@
     loading.style.display = 'none';
 
     if (!photos || photos.length === 0) {
-      grid.innerHTML = '<p class="no-entries">No photos yet. Be the first to share a photo of Philip.</p>';
+      grid.innerHTML = '<p class="no-entries" role="status">No photos yet. Be the first to share a photo of Philip.</p>';
       return;
     }
 
@@ -75,25 +82,28 @@
       var originalText = submitBtn.textContent;
       submitBtn.disabled = true;
       submitBtn.textContent = 'Uploading...';
-      formStatus.textContent = '';
-      formStatus.className = 'form-status';
+      clearStatus();
 
       var file = fileInput.files[0];
       if (!file) {
+        fileInput.setAttribute('aria-invalid', 'true');
         showStatus('Please select a photo.', 'error');
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
         return;
       }
+      fileInput.removeAttribute('aria-invalid');
 
       // Validate type
       var validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (validTypes.indexOf(file.type) === -1) {
+        fileInput.setAttribute('aria-invalid', 'true');
         showStatus('Please use a JPEG, PNG, GIF, or WebP image.', 'error');
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
         return;
       }
+      fileInput.removeAttribute('aria-invalid');
 
       try {
         // Resize image before upload (max 1600px wide)
@@ -156,8 +166,19 @@
   }
 
   function showStatus(message, type) {
+    formStatus.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    formStatus.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
+    formStatus.setAttribute('aria-atomic', 'true');
     formStatus.textContent = message;
     formStatus.className = 'form-status ' + type + '-message';
+  }
+
+  function clearStatus() {
+    formStatus.removeAttribute('role');
+    formStatus.setAttribute('aria-live', 'polite');
+    formStatus.setAttribute('aria-atomic', 'true');
+    formStatus.textContent = '';
+    formStatus.className = 'form-status';
   }
 
   function escapeHtml(str) {

@@ -102,19 +102,21 @@
     </ol>
   </nav>
 
-  <main id="main">
+  <main id="main" aria-labelledby="page-title">
     <header class="page-hero obituary-home-hero">
       <div class="home-hero-grid">
         <div class="home-hero-copy">
           <p class="hero-kicker">Official Family Obituary</p>
-          <h1>Philip Joseph <span class="nickname">"P.J."</span> O'Connor</h1>
+          <h1 id="page-title">Philip Joseph <span class="nickname">"P.J."</span> O'Connor</h1>
           <p class="dates"><time datetime="1943-09-16" data-site-bind="person.birthDate">September 16, 1943</time> to <time datetime="2026-03-13" data-site-bind="person.deathDate">March 13, 2026</time></p>
-          <p class="places"><span data-site-bind="person.birthplace">Salem, Massachusetts</span> to <span data-site-bind="person.deathplace">Hendersonville, North Carolina</span></p>
-          <p class="subtitle">This is the central family record for Philip Joseph O'Connor: his obituary, the service details, a grandson's reflection, and a memorial giving page built to preserve his story with clarity and dignity.</p>
+          <p class="places" data-site-bind="person.locationLine">Salem, Massachusetts • Ipswich, MA • New Braunfels, TX • Hendersonville, North Carolina</p>
+          <p class="subtitle">This is the central family record for Philip Joseph O'Connor: an obituary written to preserve the fuller story of his life, his service details, a grandson's reflection, and a memorial page built to remember every branch of his family with clarity and dignity.</p>
           <div class="hero-actions">
-            <a href="#obituary" class="hero-action primary">Read the Obituary</a>
-            <a href="/service" class="hero-action">Service Details</a>
-            <a href="/reflection" class="hero-action">Grandson's Reflection</a>
+            <a href="#obituary" class="hero-action primary" aria-label="Jump to Philip Joseph O'Connor's obituary text">Read the Obituary</a>
+            <a href="#photo-gallery" class="hero-action" aria-label="Jump to the photo gallery on this page">Photo Gallery</a>
+            <a href="#tribute-wall" class="hero-action" aria-label="Jump to the tribute wall on this page">Tribute Wall</a>
+            <a href="/service" class="hero-action" aria-label="View service details for Philip Joseph O'Connor">Service Details</a>
+            <a href="/reflection" class="hero-action" aria-label="Read Jake Sadoway's reflection on Philip Joseph O'Connor">Grandson's Reflection</a>
           </div>
         </div>
         <figure class="hero-portrait">
@@ -126,20 +128,21 @@
 
     <section class="obituary-lede">
       <p><strong>Philip Joseph O'Connor</strong>, known to many as <strong>P.J. O'Connor</strong>, passed away on <time datetime="2026-03-13">March 13, 2026</time>, in Hendersonville, North Carolina, after a long battle with pancreatic cancer. He was born on <time datetime="1943-09-16">September 16, 1943</time>, in Salem, Massachusetts, and lived a life marked by drive, intelligence, athleticism, leadership, contradiction, humor, distance, love, and enduring family consequence.</p>
+      <p>This memorial exists to preserve a fuller family record of Philip Joseph O'Connor's life, including the family members and descendants who belong in his story and whose place in that story should be named plainly.</p>
     </section>
 
-    <article id="obituary" class="obituary-feature">
-      <h2>Obituary for Philip Joseph O'Connor</h2>
+    <article id="obituary" class="obituary-feature" aria-labelledby="obituary-title">
+      <h2 id="obituary-title">Obituary for Philip Joseph O'Connor</h2>
       <p>Philip Joseph O'Connor was born in Salem, Massachusetts and raised in Lynn, where he developed an early love of sports and competition. He played football, basketball, and baseball, graduated from Essex Aggie High School, and carried that ambition forward to Michigan State University, where he studied Human Resources, Business Management, and Labor Relations. That combination of discipline, intelligence, and force of personality would shape the rest of his life.</p>
       <p>Over the course of his career, Philip Joseph O'Connor worked with major organizations including General Motors, Raytheon, LTV Vought, Dee Howard Company, EADS Sogerma, Elbit Systems, M7 Aerospace, and 4M Logistics. He built a reputation as a capable executive and business leader, particularly in human resources, labor relations, and aerospace operations. He moved through high-pressure environments with confidence and authority, and his professional life reflected both range and intensity.</p>
       <p>Outside of work, P.J. O'Connor remained deeply connected to the rhythms that had shaped him early: sports, coaching, competition, and family identity. He coached Little League, followed Michigan State with loyalty, enjoyed golf later in life, and was remembered by those close to him for specific details that make a person real long after they are gone, including his love of ice cream and banana splits.</p>
-      <p>His life was not simple, and this memorial does not pretend otherwise. Philip Joseph O'Connor's story includes achievement and absence, devotion and fracture, love and pain. He was part of a family whose bonds stretched across years, distances, reconciliations, disappointments, and moments of grace. That truth matters. A real obituary should preserve the person, not flatten the life.</p>
-      <p>He is survived by his children Mark, Bethlee McLaughlin, Brian O'Connor, Jessica Sadoway, and Kerry Stagliano; by grandchildren and extended family; and by all those whose lives were permanently shaped by knowing him, loving him, struggling with him, or carrying his name forward. Philip Joseph O'Connor leaves behind not only memories, but a bloodline, a history, and a legacy that remains alive in the people still telling the truth of his life.</p>
+      <p>His life was not simple, and this memorial does not pretend otherwise. Philip Joseph O'Connor's story includes achievement and absence, devotion and fracture, love and pain. He was part of a family whose bonds stretched across years, distances, reconciliations, disappointments, and moments of grace. That truth matters. A real obituary should preserve the person, not flatten the life, and it should not leave whole branches of a family unnamed.</p>
+      <p>He is survived by his children Mark, Bethlee McLaughlin, Brian O'Connor, Jessica Sadoway, and Kerry Stagliano; by Jessica's children Jake, Emily, and Abbey, and by Abbey's husband Stephen; by grandchildren and extended family across every branch of his family; and by all those whose lives were permanently shaped by knowing him, loving him, struggling with him, or carrying his name forward. This memorial intentionally names Jessica and her family because they are part of Philip Joseph O'Connor's life, his lineage, and his legacy.</p>
       <p>May he rest in peace, and may his story be remembered in full.</p>
     </article>
 
-    <section class="memorial-highlight">
-      <h2>Family Notes</h2>
+    <section class="memorial-highlight" aria-labelledby="family-notes-title">
+      <h2 id="family-notes-title">Family Notes</h2>
       <div class="memorial-highlight-grid">
         <div class="memorial-highlight-card">
           <h3>A Grandson's Reflection</h3>
@@ -185,6 +188,88 @@
       </div>
     </div>
 
+    <section class="homepage-community-section gallery-upload-section" id="photo-gallery" aria-labelledby="photo-gallery-title">
+      <div class="homepage-section-header">
+        <div>
+          <p class="hero-kicker">Photo Gallery</p>
+          <h2 id="photo-gallery-title">Photos of Philip</h2>
+          <p>Family photographs, personal snapshots, and shared memories belong alongside Philip Joseph O'Connor's obituary. If you have a photo that should live here, add it below.</p>
+        </div>
+        <a href="#photo-upload-form" class="hero-action" aria-label="Jump to the photo upload form">Upload Your Own Photo</a>
+      </div>
+
+      <p id="photo-upload-help" class="form-helper">Accepted formats: JPEG, PNG, GIF, and WebP. Uploaded photos are added to the memorial gallery so visitors can see them alongside Philip's obituary.</p>
+
+      <form id="photo-upload-form" class="photo-upload-form" aria-describedby="photo-gallery-title photo-upload-help">
+        <div class="form-group">
+          <label for="photo-file">Choose Photo *</label>
+          <input type="file" id="photo-file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" required aria-describedby="photo-upload-help">
+        </div>
+        <div id="photo-preview" class="photo-preview" style="display:none;">
+          <img id="preview-img" alt="Preview of selected photo">
+        </div>
+        <div class="form-group">
+          <label for="caption">Caption</label>
+          <input type="text" id="caption" name="caption" placeholder="A short description or memory tied to this photo" maxlength="500">
+        </div>
+        <div class="form-group">
+          <label for="uploader_name">Your Name</label>
+          <input type="text" id="uploader_name" name="uploader_name" placeholder="Your name" maxlength="200">
+        </div>
+        <button type="submit" aria-label="Upload your photo to Philip Joseph O'Connor's memorial gallery">Upload Photo</button>
+      </form>
+      <div id="upload-status" class="form-status" aria-live="polite"></div>
+
+      <div class="gallery-section homepage-gallery-shell">
+        <div id="gallery-grid" class="gallery-grid">
+          <div class="loading" id="gallery-loading" role="status">Loading photos...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="homepage-community-section guestbook-form-section" id="tribute-wall" aria-labelledby="tribute-wall-title">
+      <div class="homepage-section-header">
+        <div>
+          <p class="hero-kicker">Tribute Wall</p>
+          <h2 id="tribute-wall-title">Messages for Philip and Family</h2>
+          <p>Leave a note, share a memory, or send something for Philip's family to hold onto. This tribute wall keeps those words visible as part of the memorial itself.</p>
+        </div>
+        <a href="#guestbook-form" class="hero-action" aria-label="Jump to the tribute wall message form">Leave a Message</a>
+      </div>
+
+      <p id="tribute-wall-help" class="form-helper">Messages are reviewed by the family before they appear on the tribute wall. Use this space for memories, condolences, or notes for Philip and his family.</p>
+
+      <form id="guestbook-form" class="guestbook-form" aria-describedby="tribute-wall-title tribute-wall-help">
+        <div class="form-group">
+          <label for="name">Your Name *</label>
+          <input type="text" id="name" name="name" required placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label for="relationship">Relationship</label>
+          <select id="relationship" name="relationship">
+            <option value="">Select...</option>
+            <option value="Family">Family</option>
+            <option value="Friend">Friend</option>
+            <option value="Colleague">Colleague</option>
+            <option value="Neighbor">Neighbor</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Your Message *</label>
+          <textarea id="message" name="message" required rows="6" placeholder="Share a memory, a story, or a note for Philip and his family..." aria-describedby="tribute-wall-help"></textarea>
+        </div>
+        <button type="submit" aria-label="Submit a tribute wall message for Philip Joseph O'Connor and his family">Share Your Memory</button>
+      </form>
+      <div id="form-status" class="form-status" aria-live="polite"></div>
+
+      <section class="guestbook-entries-section homepage-guestbook-shell">
+        <div id="guestbook-entries" class="guestbook-entries">
+          <div class="loading" id="entries-loading" role="status">Loading messages...</div>
+        </div>
+      </section>
+    </section>
+
     <section class="contextual-links" aria-label="Continue to supporting pages">
       <ul>
         <li><a href="/reflection">A grandson's reflection on Philip Joseph O'Connor &rarr;</a></li>
@@ -198,6 +283,8 @@
 
   <script src="/js/site-data.js"></script>
   <script src="/js/site-shell.js"></script>
+  <script src="/js/gallery.js"></script>
+  <script src="/js/guestbook.js"></script>
   <script>
   (function() {
     var title = 'Philip Joseph O\'Connor obituary and official family memorial';

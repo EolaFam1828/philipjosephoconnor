@@ -9,6 +9,9 @@
 
   // Load approved entries on page load
   async function loadEntries() {
+    if (entriesContainer) {
+      entriesContainer.setAttribute('aria-busy', 'true');
+    }
     try {
       var response = await fetch(API_URL);
       if (!response.ok) throw new Error('Failed to load messages');
@@ -17,6 +20,10 @@
     } catch (error) {
       entriesLoading.textContent = 'Unable to load messages at this time. Please try again later.';
       console.error('Error loading guestbook entries:', error);
+    } finally {
+      if (entriesContainer) {
+        entriesContainer.setAttribute('aria-busy', 'false');
+      }
     }
   }
 
@@ -25,7 +32,7 @@
     entriesLoading.style.display = 'none';
 
     if (!entries || entries.length === 0) {
-      entriesContainer.innerHTML = '<p class="no-entries">No messages yet. Be the first to share a memory.</p>';
+      entriesContainer.innerHTML = '<p class="no-entries" role="status">No messages yet. Be the first to share a memory.</p>';
       return;
     }
 
@@ -59,8 +66,7 @@
     var originalText = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
-    formStatus.textContent = '';
-    formStatus.className = 'form-status';
+    clearStatus();
 
     var data = {
       name: form.name.value.trim(),
@@ -68,7 +74,16 @@
       message: form.message.value.trim()
     };
 
+    form.name.removeAttribute('aria-invalid');
+    form.message.removeAttribute('aria-invalid');
+
     if (!data.name || !data.message) {
+      if (!data.name) {
+        form.name.setAttribute('aria-invalid', 'true');
+      }
+      if (!data.message) {
+        form.message.setAttribute('aria-invalid', 'true');
+      }
       showStatus('Please fill in your name and message.', 'error');
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
@@ -96,8 +111,19 @@
   }
 
   function showStatus(message, type) {
+    formStatus.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    formStatus.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
+    formStatus.setAttribute('aria-atomic', 'true');
     formStatus.textContent = message;
     formStatus.className = 'form-status ' + type + '-message';
+  }
+
+  function clearStatus() {
+    formStatus.removeAttribute('role');
+    formStatus.setAttribute('aria-live', 'polite');
+    formStatus.setAttribute('aria-atomic', 'true');
+    formStatus.textContent = '';
+    formStatus.className = 'form-status';
   }
 
   function escapeHtml(str) {

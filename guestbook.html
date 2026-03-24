@@ -97,17 +97,18 @@
 
     <header class="page-hero">
       <h1>Philip Joseph O'Connor Guestbook</h1>
-      <p class="subtitle">Share condolences, tributes, and memories of Philip Joseph O'Connor.</p>
+      <p class="subtitle">Share condolences, tributes, and memories of Philip Joseph O'Connor, also featured on the homepage tribute wall.</p>
       <hr>
     </header>
 
     <section class="guestbook-intro">
-      <p>Philip Joseph O'Connor touched many lives across many decades. Whether you knew him as a colleague, a coach, a friend, or family, we would love to hear your memories. Your words bring comfort to the family and help preserve the full story of a life well-lived.</p>
+      <p>Philip Joseph O'Connor touched many lives across many decades. Whether you knew him as a colleague, a coach, a friend, or family, we would love to hear your memories. This standalone guestbook supports the homepage obituary, which now serves as the central memorial page.</p>
     </section>
 
     <section class="guestbook-form-section">
       <h2>Leave a Message</h2>
-      <form id="guestbook-form" class="guestbook-form">
+      <p id="guestbook-help" class="form-helper">Messages are reviewed by the family before appearing publicly. Please use this space for memories, condolences, and notes for Philip and his family.</p>
+      <form id="guestbook-form" class="guestbook-form" aria-describedby="guestbook-help">
         <div class="form-group">
           <label for="name">Your Name *</label>
           <input type="text" id="name" name="name" required placeholder="Your full name">
@@ -125,9 +126,9 @@
         </div>
         <div class="form-group">
           <label for="message">Your Message *</label>
-          <textarea id="message" name="message" required rows="6" placeholder="Share a memory, a story, or your condolences..."></textarea>
+          <textarea id="message" name="message" required rows="6" placeholder="Share a memory, a story, or your condolences..." aria-describedby="guestbook-help"></textarea>
         </div>
-        <button type="submit">Share Your Memory</button>
+        <button type="submit" aria-label="Submit a guestbook message for Philip Joseph O'Connor and his family">Share Your Memory</button>
       </form>
       <div id="form-status" class="form-status" aria-live="polite"></div>
     </section>
@@ -135,12 +136,12 @@
     <section class="guestbook-entries-section">
       <h2>Messages &amp; Memories</h2>
       <div id="guestbook-entries" class="guestbook-entries">
-        <div class="loading" id="entries-loading">Loading messages...</div>
+        <div class="loading" id="entries-loading" role="status">Loading messages...</div>
       </div>
     </section>
 
     <section class="contextual-links">
-      <p>To learn more about Philip's life and legacy, visit the <a href="/memorial">Philip Joseph O'Connor memorial hub</a>, <a href="/about">Philip Joseph O'Connor biography</a>, or the <a href="/timeline">Philip Joseph O'Connor timeline</a>.</p>
+      <p>Return to the <a href="/">main obituary and memorial page</a>, read <a href="/reflection">A Grandson's Reflection</a>, or review the <a href="/service">service details</a>.</p>
     </section>
 
     <section data-memorial-guide data-guide-title="Read More About Philip Joseph O'Connor Before or After You Leave a Message"></section>

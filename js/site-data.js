@@ -9,7 +9,8 @@
       birthDate: 'September 16, 1943',
       deathDate: 'March 13, 2026',
       birthplace: 'Salem, Massachusetts',
-      deathplace: 'Hendersonville, North Carolina'
+      deathplace: 'Hendersonville, North Carolina',
+      locationLine: 'Salem, Massachusetts • Ipswich, MA • New Braunfels, TX • Hendersonville, North Carolina'
     },
     service: {
       shortDate: 'April 11, 2026',

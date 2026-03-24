@@ -92,17 +92,22 @@
 
     <header class="page-hero">
       <h1>Philip Joseph O'Connor Photo Gallery</h1>
-      <p class="subtitle">Family photos, memorial images, and shared memories of Philip Joseph O'Connor.</p>
+      <p class="subtitle">Family photos, memorial images, and shared memories of Philip Joseph O'Connor, also featured on the homepage obituary.</p>
       <hr>
     </header>
+
+    <section class="guestbook-intro">
+      <p>This standalone gallery supports the main obituary page. The homepage remains the primary memorial record, and this page exists for visitors who want a dedicated place to browse or contribute photos.</p>
+    </section>
 
     <section class="gallery-upload-section">
       <h2>Share a Photo</h2>
       <p>Help us celebrate Philip's life by sharing a cherished photo — from family gatherings, holidays, his career, the golf course, or everyday moments.</p>
-      <form id="photo-upload-form" class="photo-upload-form">
+      <p id="gallery-upload-help" class="form-helper">Accepted formats: JPEG, PNG, GIF, and WebP. Uploaded photos are added to Philip Joseph O'Connor's memorial gallery.</p>
+      <form id="photo-upload-form" class="photo-upload-form" aria-describedby="gallery-upload-help">
         <div class="form-group">
           <label for="photo-file">Choose Photo *</label>
-          <input type="file" id="photo-file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" required>
+          <input type="file" id="photo-file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" required aria-describedby="gallery-upload-help">
         </div>
         <div id="photo-preview" class="photo-preview" style="display:none;">
           <img id="preview-img" alt="Preview of selected photo">
@@ -115,7 +120,7 @@
           <label for="uploader_name">Your Name</label>
           <input type="text" id="uploader_name" name="uploader_name" placeholder="Your name" maxlength="200">
         </div>
-        <button type="submit">Upload Photo</button>
+        <button type="submit" aria-label="Upload a photo to Philip Joseph O'Connor's memorial gallery">Upload Photo</button>
       </form>
       <div id="upload-status" class="form-status" aria-live="polite"></div>
     </section>
@@ -123,19 +128,19 @@
     <section class="gallery-section">
       <h2>Photos &amp; Memories</h2>
       <div id="gallery-grid" class="gallery-grid">
-        <div class="loading" id="gallery-loading">Loading photos...</div>
+        <div class="loading" id="gallery-loading" role="status">Loading photos...</div>
       </div>
     </section>
 
     <section class="cta-links">
       <div class="cta-grid">
-        <a href="/guestbook" class="cta-card">
-          <h3>Philip Joseph O'Connor Guestbook &rarr;</h3>
-          <p>Leave a written message for the family or share a favorite story.</p>
+        <a href="/" class="cta-card">
+          <h3>Return to the Main Obituary &rarr;</h3>
+          <p>See the central memorial page with the obituary, photo gallery, tribute wall, reflection, and service details together.</p>
         </a>
-        <a href="/timeline" class="cta-card">
-          <h3>Philip Joseph O'Connor Timeline &rarr;</h3>
-          <p>See where the photos fit into the broader chronology of Philip's life.</p>
+        <a href="/reflection" class="cta-card">
+          <h3>A Grandson's Reflection &rarr;</h3>
+          <p>Read Jake Sadoway's personal reflection on family, lineage, and remembrance.</p>
         </a>
       </div>
     </section>
