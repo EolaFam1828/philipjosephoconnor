@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/obituary", "destination": "/obituary.html" },
+    { "source": "/life", "destination": "/life.html" },
+    { "source": "/service", "destination": "/service.html" },
+    { "source": "/gallery", "destination": "/gallery.html" },
+    { "source": "/guestbook", "destination": "/guestbook.html" }
+  ]
+}

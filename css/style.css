@@ -1,0 +1,1217 @@
+/* ============================================================
+   Philip Joseph O'Connor — Memorial Obituary
+   A single stylesheet. Every detail matters.
+   ============================================================ */
+
+/* --- Fonts -------------------------------------------------- */
+/* Google Fonts loaded via <link> in HTML for better performance */
+
+/* --- Custom Properties -------------------------------------- */
+:root {
+  --bg:          #FAF6F1;
+  --bg-alt:      #F0EBE3;
+  --text:        #2C2C2C;
+  --text-muted:  #6B6B6B;
+  --accent:      #B8953E;
+  --accent-dark: #96782F;
+  --border:      #D4CCBF;
+  --white:       #FFFFFF;
+
+  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+  --max-width:   720px;
+  --nav-height:  60px;
+}
+
+/* --- Reset / Normalize -------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+img,
+picture,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.25s ease, border-color 0.25s ease;
+  border-bottom: 1px solid transparent;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--accent-dark);
+  border-bottom-color: var(--accent-dark);
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* --- Selection ---------------------------------------------- */
+::selection {
+  background-color: var(--accent);
+  color: var(--white);
+}
+
+::-moz-selection {
+  background-color: var(--accent);
+  color: var(--white);
+}
+
+/* --- Skip Link (Accessibility) ------------------------------ */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  background: var(--accent);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 0 0 4px 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* --- Container ---------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s ease;
+}
+
+nav.scrolled {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+}
+
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-height);
+}
+
+.site-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  border-bottom: none;
+  white-space: nowrap;
+}
+
+.site-name:hover {
+  color: var(--accent);
+  border-bottom: none;
+}
+
+/* --- Nav Links ---------------------------------------------- */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.nav-links a.active,
+.nav-links a[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+/* --- Hamburger — Pure CSS Checkbox Hack --------------------- */
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-label {
+  display: none;
+  cursor: pointer;
+  width: 28px;
+  height: 20px;
+  position: relative;
+  z-index: 1001;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--text);
+  border-radius: 2px;
+  position: absolute;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle-label span {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nav-toggle-label span::before {
+  content: '';
+  top: -8px;
+}
+
+.nav-toggle-label span::after {
+  content: '';
+  top: 8px;
+}
+
+/* Hamburger open state */
+.nav-toggle:checked ~ .nav-toggle-label span {
+  background-color: transparent;
+}
+
+.nav-toggle:checked ~ .nav-toggle-label span::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.nav-toggle:checked ~ .nav-toggle-label span::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* ============================================================
+   PAGE HERO / HEADER
+   ============================================================ */
+header.page-hero {
+  text-align: center;
+  padding: 80px 24px 48px;
+  position: relative;
+}
+
+header.page-hero h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+
+header.page-hero .dates {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+}
+
+header.page-hero .hero-rule {
+  width: 60px;
+  height: 2px;
+  background-color: var(--accent);
+  border: none;
+  margin: 0 auto;
+}
+
+header.page-hero .subtitle {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-top: 20px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   BREADCRUMB
+   ============================================================ */
+.breadcrumb {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 16px 0 8px;
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  border-bottom: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.breadcrumb .separator {
+  margin: 0 6px;
+  color: var(--border);
+}
+
+.breadcrumb ol li + li::before {
+  content: "/";
+  margin: 0 8px;
+  color: var(--border);
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.8rem;
+  line-height: 1.3;
+  color: var(--text);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--accent);
+}
+
+h2.centered::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+p {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 8px 0 8px 24px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   ARTICLE — Obituary Text
+   ============================================================ */
+article {
+  padding: 32px 0 48px;
+}
+
+article p {
+  margin-bottom: 1.5em;
+}
+
+article p:last-child {
+  margin-bottom: 0;
+}
+
+article h2 {
+  margin-top: 48px;
+  margin-bottom: 20px;
+}
+
+article h3 {
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+article ul,
+article ol {
+  margin: 0 0 1.5em 24px;
+  list-style: disc;
+}
+
+article ol {
+  list-style: decimal;
+}
+
+article li {
+  margin-bottom: 0.5em;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   CTA LINKS — Card Grid
+   ============================================================ */
+.cta-links {
+  margin: 40px 0;
+}
+
+.cta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.cta-card {
+  display: block;
+  padding: 24px 20px;
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.cta-card:hover,
+.cta-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border-bottom-color: var(--accent);
+  border-bottom-width: 2px;
+}
+
+.cta-card h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.cta-card p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   LIFE & LEGACY — Biography Sections
+   ============================================================ */
+.life-section {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.life-section:last-child {
+  border-bottom: none;
+}
+
+.life-section h2 {
+  margin-bottom: 20px;
+}
+
+.life-section p {
+  margin-bottom: 1.2em;
+}
+
+/* ============================================================
+   TIMELINE — Career / Life Events
+   ============================================================ */
+.timeline {
+  position: relative;
+  padding: 16px 0 16px 32px;
+  margin: 24px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 8px;
+  width: 2px;
+  background-color: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+  padding-left: 8px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.timeline-year {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.timeline-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.timeline-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   SERVICE — Event Info Cards
+   ============================================================ */
+.service-card {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 32px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--accent);
+}
+
+.service-card .service-type {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.service-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+}
+
+.service-card .service-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.service-card .service-detail .label {
+  font-weight: 600;
+  min-width: 70px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.service-card .service-note {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ============================================================
+   GALLERY — Photo Grid
+   ============================================================ */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 32px 0;
+}
+
+.gallery-item figure {
+  margin: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item figure:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-item figcaption {
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  border-top: 1px solid var(--border);
+}
+
+.gallery-placeholder {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 1.05rem;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  margin: 32px 0;
+}
+
+/* ============================================================
+   GUESTBOOK — Form & Entries
+   ============================================================ */
+.guestbook-form {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 36px 32px;
+  margin-bottom: 48px;
+}
+
+.guestbook-form h2 {
+  margin-bottom: 24px;
+}
+
+.guestbook-form .form-group {
+  margin-bottom: 24px;
+}
+
+.guestbook-form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.guestbook-form input,
+.guestbook-form select,
+.guestbook-form textarea {
+  width: 100%;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  font-size: 1rem;
+  color: var(--text);
+  transition: border-color 0.25s ease;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.guestbook-form input:focus,
+.guestbook-form select:focus,
+.guestbook-form textarea:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.guestbook-form textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.7;
+}
+
+.guestbook-form select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  padding-right: 24px;
+}
+
+.guestbook-form button {
+  display: inline-block;
+  padding: 14px 36px;
+  background-color: var(--accent);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+}
+
+.guestbook-form button:hover {
+  background-color: var(--accent-dark);
+}
+
+.guestbook-form button:active {
+  transform: scale(0.98);
+}
+
+.guestbook-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Guestbook Entries -------------------------------------- */
+.guestbook-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.guestbook-entry {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 24px 28px;
+  position: relative;
+}
+
+.guestbook-entry .entry-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.guestbook-entry .entry-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.relationship-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  background-color: var(--bg-alt);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+.guestbook-entry .entry-message {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.guestbook-entry .entry-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   FORM FEEDBACK
+   ============================================================ */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.loading::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  margin-right: 10px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.success-message {
+  padding: 16px 20px;
+  background-color: #f0f7f0;
+  border: 1px solid #b8d4b8;
+  border-radius: 6px;
+  color: #2d5a2d;
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.error-message {
+  padding: 16px 20px;
+  background-color: #fdf0f0;
+  border: 1px solid #dbb8b8;
+  border-radius: 6px;
+  color: #6b2d2d;
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+/* ============================================================
+   MEMORIAL / DONATION LINK
+   ============================================================ */
+.memorial-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+  border-bottom: none;
+}
+
+.memorial-link:hover {
+  background-color: var(--white);
+  border-color: var(--accent);
+  color: var(--accent-dark);
+  border-bottom: none;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 24px 40px;
+  margin-top: 64px;
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.footer-nav {
+  margin-bottom: 24px;
+}
+
+.footer-nav ul {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-nav a {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: none;
+}
+
+.footer-nav a:hover {
+  color: var(--accent);
+  border-bottom: none;
+}
+
+.footer-rule {
+  width: 40px;
+  height: 1px;
+  background-color: var(--accent);
+  border: none;
+  margin: 0 auto 24px;
+}
+
+.footer-memorial {
+  margin-bottom: 24px;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVE — Tablet (768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* --- Navigation hamburger visible --- */
+  .nav-toggle-label {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 260px;
+    height: 100vh;
+    background-color: var(--bg);
+    border-left: 1px solid var(--border);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 80px 32px 32px;
+    gap: 0;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-links a {
+    font-size: 1rem;
+    padding: 12px 0;
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-links a:last-child {
+    border-bottom: 2px solid transparent;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active,
+  .nav-links a[aria-current="page"] {
+    border-bottom-color: var(--accent);
+  }
+
+  .nav-toggle:checked ~ .nav-links {
+    transform: translateX(0);
+  }
+
+  /* Overlay */
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    pointer-events: none;
+    transition: background 0.35s ease;
+    z-index: 999;
+  }
+
+  .nav-toggle:checked ~ .nav-overlay {
+    background: rgba(0, 0, 0, 0.3);
+    pointer-events: auto;
+  }
+
+  /* --- Hero --- */
+  header.page-hero {
+    padding: 60px 24px 36px;
+  }
+
+  header.page-hero h1 {
+    font-size: 2rem;
+  }
+
+  /* --- Typography --- */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+
+  /* --- Gallery grid --- */
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* --- CTA grid --- */
+  .cta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* --- Service card --- */
+  .service-card {
+    padding: 24px;
+  }
+
+  /* --- Guestbook form --- */
+  .guestbook-form {
+    padding: 28px 24px;
+  }
+
+  .guestbook-entry {
+    padding: 20px 22px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile (480px)
+   ============================================================ */
+@media (max-width: 480px) {
+
+  .container {
+    padding: 0 16px;
+  }
+
+  header.page-hero {
+    padding: 48px 16px 28px;
+  }
+
+  header.page-hero h1 {
+    font-size: 1.8rem;
+  }
+
+  header.page-hero .dates {
+    font-size: 0.95rem;
+  }
+
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
+
+  p {
+    font-size: 1rem;
+  }
+
+  .cta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .service-card {
+    padding: 20px 18px;
+  }
+
+  .service-card .service-detail {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .guestbook-form {
+    padding: 24px 18px;
+  }
+
+  .guestbook-form button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .guestbook-entry {
+    padding: 18px 16px;
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .timeline {
+    padding-left: 24px;
+  }
+}
+
+/* ============================================================
+   PRINT STYLESHEET
+   ============================================================ */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  nav,
+  footer,
+  .skip-link,
+  .nav-toggle-label,
+  .guestbook-form,
+  .cta-links,
+  .loading {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  header.page-hero {
+    padding: 0 0 24px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 24px;
+  }
+
+  h1 { font-size: 24pt; }
+  h2 { font-size: 18pt; }
+  h3 { font-size: 14pt; }
+
+  h2::after {
+    display: none;
+  }
+
+  article {
+    padding: 0;
+  }
+
+  a {
+    text-decoration: underline;
+    border: none !important;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    color: #555;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .guestbook-entry,
+  .service-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+}
