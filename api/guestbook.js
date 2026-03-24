@@ -1,10 +1,4 @@
-import { createClient } from 'redis';
-
-async function getRedis() {
-  var client = createClient({ url: process.env.KV_URL });
-  await client.connect();
-  return client;
-}
+import { STORAGE_KEYS, createRecordId, readList, sanitizeText, writeList } from '../lib/storage.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,22 +9,16 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  var redis;
   try {
-    redis = await getRedis();
-
-    // GET — return approved entries
     if (req.method === 'GET') {
-      var data = await redis.get('guestbook_approved');
-      return res.status(200).json(data ? JSON.parse(data) : []);
+      return res.status(200).json(await readList(STORAGE_KEYS.guestbookApproved));
     }
 
-    // POST — submit new entry (goes to pending)
     if (req.method === 'POST') {
-      var body = req.body;
-      var name = body.name;
-      var relationship = body.relationship;
-      var message = body.message;
+      var body = req.body || {};
+      var name = sanitizeText(body.name);
+      var relationship = sanitizeText(body.relationship).slice(0, 100);
+      var message = sanitizeText(body.message);
 
       if (!name || !message) {
         return res.status(400).json({ error: 'Name and message are required' });
@@ -39,22 +27,17 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Input too long' });
       }
 
-      var sanitize = function(str) {
-        return str.replace(/<[^>]*>/g, '').trim();
-      };
-
       var entry = {
-        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-        name: sanitize(name),
-        relationship: relationship ? sanitize(relationship).slice(0, 100) : null,
-        message: sanitize(message),
+        id: createRecordId(),
+        name: name,
+        relationship: relationship || null,
+        message: message,
         created_at: new Date().toISOString()
       };
 
-      var raw = await redis.get('guestbook_pending');
-      var pending = raw ? JSON.parse(raw) : [];
+      var pending = await readList(STORAGE_KEYS.guestbookPending);
       pending.unshift(entry);
-      await redis.set('guestbook_pending', JSON.stringify(pending));
+      await writeList(STORAGE_KEYS.guestbookPending, pending);
 
       return res.status(201).json({
         success: true,
@@ -66,7 +49,5 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error('Guestbook error:', error);
     return res.status(500).json({ error: 'Server error' });
-  } finally {
-    if (redis) await redis.disconnect().catch(function() {});
   }
 }
