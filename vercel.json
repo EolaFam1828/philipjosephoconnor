@@ -1,13 +1,17 @@
 {
+  "redirects": [
+    { "source": "/obituary", "destination": "/", "permanent": true },
+    { "source": "/memorial", "destination": "/", "permanent": true },
+    { "source": "/about", "destination": "/", "permanent": true },
+    { "source": "/timeline", "destination": "/", "permanent": true },
+    { "source": "/life", "destination": "/", "permanent": true },
+    { "source": "/gallery", "destination": "/", "permanent": true },
+    { "source": "/guestbook", "destination": "/", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/memorial", "destination": "/memorial.html" },
-    { "source": "/obituary", "destination": "/obituary.html" },
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/timeline", "destination": "/timeline.html" },
-    { "source": "/life", "destination": "/life.html" },
+    { "source": "/reflection", "destination": "/reflection.html" },
     { "source": "/service", "destination": "/service.html" },
-    { "source": "/gallery", "destination": "/gallery.html" },
-    { "source": "/guestbook", "destination": "/guestbook.html" },
+    { "source": "/in-memory", "destination": "/memory.html" },
     { "source": "/admin", "destination": "/admin.html" }
   ]
 }

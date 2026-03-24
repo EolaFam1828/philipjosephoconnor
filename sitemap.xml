@@ -8,57 +8,17 @@
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
-      <image:title>Philip Joseph O'Connor Memorial Portrait</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://philipjosephoconnor.com/memorial</loc>
-    <lastmod>2026-03-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <image:image>
-      <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
-      <image:title>Philip Joseph O'Connor Memorial and Obituary</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://philipjosephoconnor.com/obituary</loc>
-    <lastmod>2026-03-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
       <image:title>Philip Joseph O'Connor Obituary</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://philipjosephoconnor.com/about</loc>
-    <lastmod>2026-03-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
-      <image:title>Biography of Philip Joseph O'Connor</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://philipjosephoconnor.com/timeline</loc>
-    <lastmod>2026-03-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
-      <image:title>Timeline of Philip Joseph O'Connor's Life</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://philipjosephoconnor.com/life</loc>
+    <loc>https://philipjosephoconnor.com/reflection</loc>
     <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
-      <image:title>Life and Legacy of Philip Joseph O'Connor</image:title>
+      <image:title>A Grandson's Reflection on Philip Joseph O'Connor</image:title>
     </image:image>
   </url>
   <url>
@@ -72,23 +32,13 @@
     </image:image>
   </url>
   <url>
-    <loc>https://philipjosephoconnor.com/gallery</loc>
+    <loc>https://philipjosephoconnor.com/in-memory</loc>
     <lastmod>2026-03-24</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <image:image>
       <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
-      <image:title>Philip Joseph O'Connor Photo Gallery</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://philipjosephoconnor.com/guestbook</loc>
-    <lastmod>2026-03-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.75</priority>
-    <image:image>
-      <image:loc>https://philipjosephoconnor.com/og-img1.jpeg</image:loc>
-      <image:title>Philip Joseph O'Connor Guestbook</image:title>
+      <image:title>In Memory of Philip Joseph O'Connor</image:title>
     </image:image>
   </url>
 </urlset>

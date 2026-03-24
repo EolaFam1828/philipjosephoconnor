@@ -27,54 +27,36 @@
     },
     navigation: [
       { key: 'home', href: '/', label: 'Home' },
-      { key: 'memorial', href: '/memorial', label: 'Memorial' },
-      { key: 'obituary', href: '/obituary', label: 'Obituary' },
-      { key: 'life', href: '/life', label: 'Life & Legacy' },
+      { key: 'reflection', href: '/reflection', label: 'Reflection' },
       { key: 'service', href: '/service', label: 'Service' },
-      { key: 'gallery', href: '/gallery', label: 'Gallery' },
-      { key: 'guestbook', href: '/guestbook', label: 'Guestbook' }
+      { key: 'memory', href: '/in-memory', label: 'In Memory' }
     ],
     footerNavigation: [
       { href: '/', label: 'Home' },
-      { href: '/memorial', label: 'Memorial' },
-      { href: '/obituary', label: 'Obituary' },
-      { href: '/about', label: 'About Philip' },
-      { href: '/timeline', label: 'Timeline' },
-      { href: '/life', label: 'Life & Legacy' },
+      { href: '/reflection', label: 'Reflection' },
       { href: '/service', label: 'Service' },
-      { href: '/gallery', label: 'Gallery' },
-      { href: '/guestbook', label: 'Guestbook' }
+      { href: '/in-memory', label: 'In Memory' }
     ],
     guideLinks: [
       {
-        href: '/memorial',
-        title: 'Philip Joseph O\'Connor Memorial Hub',
-        description: 'A focused overview page connecting the obituary, biography, timeline, service details, gallery, and guestbook for Philip Joseph O\'Connor.'
-      },
-      {
-        href: '/about',
-        title: 'Philip Joseph O\'Connor Biography',
-        description: 'A biographical page built around Philip Joseph O\'Connor\'s identity, family, education, and career.'
-      },
-      {
-        href: '/timeline',
-        title: 'Philip Joseph O\'Connor Timeline',
-        description: 'A chronological view of the milestones, moves, work, family life, and remembrance events that shaped Philip Joseph O\'Connor\'s story.'
-      },
-      {
-        href: '/obituary',
+        href: '/',
         title: 'Philip Joseph O\'Connor Obituary',
-        description: 'The complete obituary text, family details, memorial service information, and tribute language in one place.'
+        description: 'The central obituary page and primary memorial record for Philip Joseph O\'Connor.'
       },
       {
-        href: '/gallery',
-        title: 'Philip Joseph O\'Connor Photos',
-        description: 'Family photographs, shared moments, and visual memories that deepen the memorial record for Philip Joseph O\'Connor.'
+        href: '/reflection',
+        title: 'A Grandson\'s Reflection',
+        description: 'A personal letter from Jake Sadoway about family, lineage, grace, and what cannot be erased.'
       },
       {
-        href: '/guestbook',
-        title: 'Philip Joseph O\'Connor Guestbook',
-        description: 'A place for condolences, stories, and written memories from family, friends, colleagues, and neighbors.'
+        href: '/service',
+        title: 'Service Details',
+        description: 'The time, location, visitation information, and directions for Philip Joseph O\'Connor\'s celebration of life.'
+      },
+      {
+        href: '/in-memory',
+        title: 'In Memory',
+        description: 'A short page for memorial giving through the American Foundation for Suicide Prevention and the family\'s statement on grief, compassion, and healing.'
       }
     ],
     copyright: '© 2026 The Family of Philip Joseph O\'Connor'
