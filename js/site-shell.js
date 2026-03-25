@@ -31,12 +31,11 @@
         '<nav class="site-nav" aria-label="Main navigation">' +
           '<div class="nav-inner">' +
             '<a href="/" class="site-name">' + escapeHtml(site.person.fullName) + '</a>' +
-            '<input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">' +
-            '<label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu" tabindex="0" role="button" aria-controls="site-nav-links" aria-expanded="false">' +
-              '<span class="sr-only">Toggle navigation menu</span>' +
+            '<input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" tabindex="-1">' +
+            '<button type="button" class="nav-toggle-label" aria-label="Toggle navigation menu" aria-controls="site-nav-links" aria-expanded="false">' +
               '<span class="hamburger"></span>' +
-            '</label>' +
-            '<ul class="nav-links" id="site-nav-links">' + links + '</ul>' +
+            '</button>' +
+            '<ul class="nav-links" id="site-nav-links" aria-hidden="true">' + links + '</ul>' +
             '<label for="nav-toggle" class="nav-overlay" aria-hidden="true"></label>' +
           '</div>' +
         '</nav>';
@@ -46,26 +45,26 @@
   function enhanceNavAccessibility() {
     document.querySelectorAll('.site-nav').forEach(function(nav) {
       var toggle = nav.querySelector('.nav-toggle');
-      var toggleLabel = nav.querySelector('.nav-toggle-label');
+      var toggleBtn = nav.querySelector('.nav-toggle-label');
       var navLinks = nav.querySelector('.nav-links');
 
-      if (!toggle || !toggleLabel || !navLinks) {
+      if (!toggle || !toggleBtn || !navLinks) {
         return;
       }
 
       function syncToggleState() {
         var expanded = !!toggle.checked;
-        toggleLabel.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        navLinks.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+        toggleBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        if (expanded) {
+          navLinks.removeAttribute('aria-hidden');
+        } else {
+          navLinks.setAttribute('aria-hidden', 'true');
+        }
       }
 
-      toggle.addEventListener('change', syncToggleState);
-      toggleLabel.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          toggle.checked = !toggle.checked;
-          syncToggleState();
-        }
+      toggleBtn.addEventListener('click', function() {
+        toggle.checked = !toggle.checked;
+        syncToggleState();
       });
 
       navLinks.querySelectorAll('a').forEach(function(link) {
@@ -79,7 +78,7 @@
         if (event.key === 'Escape' && toggle.checked) {
           toggle.checked = false;
           syncToggleState();
-          toggleLabel.focus();
+          toggleBtn.focus();
         }
       });
 
