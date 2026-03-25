@@ -44,7 +44,7 @@
       });
       return (
         '<figure class="gallery-item">' +
-          '<img src="' + escapeAttr(photo.url) + '" alt="' + escapeAttr(photo.caption || 'Photo of Philip') + '" loading="lazy">' +
+          '<img src="' + escapeAttr(photo.url) + '" alt="' + escapeAttr(photo.caption || 'Photo of Philip') + '" loading="lazy" width="400" height="300">' +
           '<figcaption>' +
             (photo.caption ? '<p class="photo-caption">' + escapeHtml(photo.caption) + '</p>' : '') +
             '<p class="photo-meta">Shared by ' + escapeHtml(photo.name) + ' &middot; ' + date + '</p>' +
